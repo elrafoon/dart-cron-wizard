@@ -1,0 +1,32 @@
+<div class="cron-field">
+	<div class="col-md-4">
+		{{name}} <span style="white-space:nowrap;">[{{rangeLow}}-{{rangeHigh}}]:</span>
+		<div style="display: block" ng-if="names != null"><small>({{shortNames}})</small></div>
+	</div>
+	<div class="col-md-8" ng-class="{'ng-invalid': invalid}">
+		<select ng-model="recurrenceType">
+			<option ng-value="RT_EVERY">every</option>
+			<option ng-value="RT_FIXED">each</option>
+			<option ng-value="RT_LIST">list</option>
+			<option ng-value="RT_RANGE">range</option>
+		</select>
+		<span style="margin-right: 10px;">
+			<input type="text" ng-model="recurrenceList" ng-required="true" ng-if="recurrenceType == RT_LIST" style="width: 100px;" placeholder="1,2-4,7">
+			<div ng-if="recurrenceType == RT_FIXED" style="display: inline;"">
+				<input type="number" ng-model="recurrenceFixed" ng-required="true" ng-if="names == null" min="{{rangeLow}}" max="{{rangeHigh}}" step="1" style="width: 45px;" placeholder="5">
+				<select ng-if="names != null" ng-model="recurrenceFixed" required name="fixed-recurrence-list">
+					<option ng-repeat="i in namesRange" ng-value="i+rangeLow">{{names[i]}}</option>
+				</select>
+			</div>
+			<span ng-if="recurrenceType == RT_RANGE" style="white-space:nowrap;">
+				<input type="number" ng-model="recurrenceRangeLow" ng-required="true" min="{{rangeLow}}" max="{{recurrenceRangeLowMax}}" step="1" style="width: 45px;">
+				<strong>-</strong>
+				<input type="number" ng-model="recurrenceRangeHigh" ng-required="true" min="{{recurrenceRangeHighMin}}" max="{{rangeHigh}}" step="1" ng-if="recurrenceType == RT_RANGE" style="width: 45px;">
+			</span>
+		</span>
+		<div style="display: inline" ng-if="recurrenceType != RT_FIXED">
+			<input type="checkbox" ng-model="enOnlyEach"> each
+			<span style="white-space:nowrap;"><input type="number" ng-model="onlyEach" ng-disabled="!enOnlyEach" min="2" step="1" style="width: 3em;">-{{reductionPostfix}}</span>
+		</div>
+	</div>
+</div>
