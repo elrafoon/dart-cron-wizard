@@ -140,8 +140,6 @@ class CronField {
           }
         }
         
-        print("$name: $invalid");
-        
         _enOnlyEach = (sEach != null);
         if(_enOnlyEach)
           _onlyEach = int.parse(sEach);

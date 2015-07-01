@@ -70,16 +70,17 @@ class CronWizard {
       _day = m.group(3);
       _month = m.group(4);
       _dow = m.group(5);
-      _interval = newValue;
+      _interval = "$minute $hour $day $month $dow";
       invalid = false;
     }
-    else
+    else {
+      _interval = newValue;
       invalid = true;
+    }
   }
   
   void updateModel() {
-    interval = 
-    model.viewValue = "$minute $hour $day $month $dow";
+    interval = model.viewValue = "$minute $hour $day $month $dow";
   }
   
   String get interval => _interval;
