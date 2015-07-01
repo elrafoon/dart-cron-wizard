@@ -106,6 +106,8 @@ class CronField {
   final RegExp _reCrude = new RegExp("^([^/]+)(?:/(\\d+))?\$");
   final RegExp _reRange = new RegExp("^(?:(?:(\\d+)(?:-(\\d+))?)|(\\*))\$");
   
+  bool inRange(num a, num l, num h) => a >= l && a <= h;
+  
   void render(dynamic newValue) {
     invalid = !(newValue is String);
     if(!invalid) {
@@ -125,10 +127,12 @@ class CronField {
                 _recurrenceRangeLow = int.parse(m.group(1));
                 _recurrenceRangeHigh = int.parse(m.group(2));
                 _recurrenceType = _RT_RANGE;
+                invalid = !inRange(_recurrenceRangeLow, rangeLow, rangeHigh) || !inRange(_recurrenceRangeHigh, rangeLow, rangeHigh);
               }
               else {
                 _recurrenceFixed = int.parse(m.group(1));
                 _recurrenceType = _RT_FIXED;            
+                invalid = !inRange(_recurrenceFixed, rangeLow, rangeHigh);
               }
             }
             else
