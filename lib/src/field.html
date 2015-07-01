@@ -1,9 +1,9 @@
 <div class="cron-field">
-	<div class="col-md-4">
+	<div class="col-md-4 cron-field-title">
 		{{name}} <span style="white-space:nowrap;">[{{rangeLow}}-{{rangeHigh}}]:</span>
 		<div style="display: block" ng-if="names != null"><small>({{shortNames}})</small></div>
 	</div>
-	<div class="col-md-8" ng-class="{'ng-invalid': invalid}">
+	<div class="col-md-8 cron-field-value" ng-class="{'ng-invalid': invalid}">
 		<select ng-model="recurrenceType">
 			<option ng-value="RT_EVERY">every</option>
 			<option ng-value="RT_FIXED">each</option>
