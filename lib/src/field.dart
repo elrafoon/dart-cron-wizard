@@ -98,7 +98,7 @@ class CronField {
   
   CronField(this._model, this.form) {
     _model.render = render;
-    updateModel();
+    updateModel(false);
   }
   
   bool invalid = true;
@@ -151,7 +151,7 @@ class CronField {
     }
   }
   
-  void updateModel() {
+  void updateModel([bool emit = true]) {
     String value;
     switch(recurrenceType) {
       case _RT_EVERY:
@@ -170,8 +170,10 @@ class CronField {
     
     if(enOnlyEach)
       value += "/$onlyEach";
-    
-    _model.viewValue = value;
+
+    if(emit)
+         _model.viewValue = value;
+
     invalid = false;
   }
   
