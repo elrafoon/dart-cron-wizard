@@ -11,10 +11,15 @@ class CronWizard {
   String _value;
   String _minute, _hour, _day, _month, _dow; // fields in cron format
   bool invalid = true;
+
+  static int idCounter = 0;
+  final int id;
   
   final RegExp _reCron = new RegExp("^((?:\\*|(?:[0-9\\-\\,]+))(?:/\\d+)?)\\s+((?:\\*|(?:[0-9\\-\\,]+))(?:/\\d+)?)\\s+((?:\\*|(?:[0-9\\-\\,]+))(?:/\\d+)?)\\s+((?:\\*|(?:[0-9\\-\\,]+))(?:/\\d+)?)\\s+((?:\\*|(?:[0-9\\-\\,]+))(?:/\\d+)?)\\s*\$");
   
-  CronWizard(this.model, this.form) {
+  CronWizard(this.model, this.form) :
+    id = idCounter++
+  {
     this.model.render = render; 
   }
   

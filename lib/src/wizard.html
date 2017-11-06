@@ -1,11 +1,11 @@
 <div class="input-group">
-	<a class="input-group-addon pointer" id="wizard-addon" data-toggle="collapse" data-target="#collapseWizard">
+	<a class="input-group-addon pointer" id="wizard-addon" data-toggle="collapse" data-target="#collapseWizard{{id}}">
 		<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	</a>
 	<input class="form-control" name="interval" ng-model="interval" ng-required="true" aria-describedby="wizard-addon1" ng-class="{'ng-invalid': invalid || anyFieldInvalid}">
 </div>
 
-<div id="collapseWizard" class="panel-collapse collapse">
+<div id="collapseWizard{{id}}" class="panel-collapse collapse">
 	<div class="panel-body">
 		<div class="row"><cron-field name="minute" field-name="minute" range-low="0" range-high="59" ng-model="minute"></cron-field></div>
 		<div class="row"><cron-field name="hour" field-name="hour" range-low="0" range-high="59" ng-model="hour"></cron-field></div>
