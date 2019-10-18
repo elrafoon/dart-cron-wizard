@@ -2,32 +2,38 @@ part of cron_wizard;
 
 @Component(
     selector: 'cron-field',
-    templateUrl: 'packages/cron_wizard/src/field.html',
-    useShadowDom: false)
-class CronField {
+    templateUrl: 'src/field.html',
+    directives: const [CORE_DIRECTIVES, materialDirectives, formDirectives, materialNumberInputDirectives],
+    providers: const [materialProviders],
+)
+class CronField implements ControlValueAccessor {
   static const int _RT_EVERY = 0, _RT_FIXED = 1, _RT_LIST = 2, _RT_RANGE = 3;
-  NgModel _model;
   NgForm form;
-  
+
+
   int get RT_EVERY => _RT_EVERY;
   int get RT_FIXED => _RT_FIXED;
   int get RT_LIST => _RT_LIST;
   int get RT_RANGE => _RT_RANGE;
   
-  @NgOneWay("range-low")
+  @Input("range-low")
   int rangeLow;
   
-  @NgOneWay("range-high")
+  @Input("range-high")
   int rangeHigh;
   
-  @NgAttr("field-name")
+  @Input("field-name")
   String name;
   
   List<String> _names;
   List<int> namesRange;
   String shortNames;
-  
-  @NgOneWay("names")
+
+  String _value = "*";
+  get value => _value;
+  set value(String val) => _value = val ?? _value;
+
+  @Input("names")
   void set names(List<String> value) {
     _names = value;
     int i = 0;
@@ -37,6 +43,13 @@ class CronField {
     else
       shortNames = value.join(", ");
   }
+
+  @Input("model_value")
+  void set model_value(String val) => _value = val;
+
+  final _valueStream = new StreamController<String>();
+  @Output()
+  String get model_value => _valueStream.stream;
   
   List<String> get names => _names;
   
@@ -96,8 +109,7 @@ class CronField {
   int get recurrenceRangeLowMax => recurrenceRangeHigh == null ? rangeHigh : math.min(rangeHigh, recurrenceRangeHigh);
   int get recurrenceRangeHighMin => recurrenceRangeLow == null ? rangeLow : math.max(rangeLow, recurrenceRangeLow);
   
-  CronField(this._model, this.form) {
-    _model.render = render;
+  CronField(this.form) {
     updateModel(false);
   }
   
@@ -152,27 +164,31 @@ class CronField {
   }
   
   void updateModel([bool emit = true]) {
-    String value;
+    String val;
     switch(recurrenceType) {
       case _RT_EVERY:
-        value = "*";
+        val = "*";
         break;
       case _RT_FIXED:
-        value = recurrenceFixed.toString();
+        val = recurrenceFixed.toString();
         break;
       case _RT_RANGE:
-        value = "${recurrenceRangeLow}-${recurrenceRangeHigh}";
+        val = "${recurrenceRangeLow}-${recurrenceRangeHigh}";
         break;
       case _RT_LIST:
-        value = recurrenceList;
+        val = recurrenceList;
         break;
     }
     
     if(enOnlyEach)
-      value += "/$onlyEach";
+      val += "/${onlyEach.round()}";
 
-    if(emit)
-         _model.viewValue = value;
+    print("Updated: $val");
+
+    if(emit){
+      _value = val;
+      _valueStream.add(_value);
+    }
 
     invalid = false;
   }

@@ -2,8 +2,10 @@ part of cron_wizard;
 
 @Component(
     selector: 'cron-wizard',
-    templateUrl: 'packages/cron_wizard/src/wizard.html',
-    useShadowDom: false)
+    templateUrl: 'src/wizard.html',
+    directives: const [CORE_DIRECTIVES, materialDirectives, formDirectives, CronField],
+    providers: const [materialProviders],
+)
 class CronWizard {
   NgModel model;
   NgForm form;
@@ -12,6 +14,10 @@ class CronWizard {
   String _minute, _hour, _day, _month, _dow; // fields in cron format
   bool invalid = true;
 
+  bool showCollapse = false;
+
+  List<String> months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  List<String> days   = ['sun','mon','tue','wed','thu','fri','sat','sun'];
   static int idCounter = 0;
   final int id;
   
@@ -19,21 +25,32 @@ class CronWizard {
   
   CronWizard(this.model, this.form) :
     id = idCounter++
-  {
-    this.model.render = render; 
+  {}
+
+
+  @Input("render_interval")
+  void set render_interval(String val) => interval = val;
+
+  final _valueStream = new StreamController<String>();
+  @Output()
+  String get render_interval => _valueStream.stream;
+
+
+  String get interval => _interval;
+  void set interval(String value) {
+    render(value);
   }
   
   bool get anyFieldInvalid {
     if(form == null)
       return false;
-    ["minute","hour","day","month","dow"].forEach((_) { if(form[_] != null && form[_].invalid) return true; });
+    ["minute","hour","day","month","dow"].forEach((_) { if(form != null) return true; });
     return false;
   }
   
   String get value => _value;
   void set value(String value) {
     _value = value;
-    model.viewValue = value;
   }
   
   String get minute => _minute;
@@ -85,11 +102,7 @@ class CronWizard {
   }
   
   void updateModel() {
-    interval = model.viewValue = "$minute $hour $day $month $dow";
-  }
-  
-  String get interval => _interval;
-  void set interval(String value) {
-    render(value);
+    interval = "$minute $hour $day $month $dow";
+    _valueStream.add(interval);
   }
 }

@@ -1,32 +1,33 @@
-<div class="cron-field">
-	<div class="col-xs-4 cron-field-title">
+<div class="cron-field col col-lg-12 form-group" style="min-width: 60rem">
+	<label class="col-xs-3 control-label theme-color-text" style="padding: 10px">
 		{{name}} <span style="white-space:nowrap;">[{{rangeLow}}-{{rangeHigh}}]:</span>
-		<div style="display: block" ng-if="names != null"><small>({{shortNames}})</small></div>
-	</div>
-	<div class="col-xs-8 cron-field-value" ng-class="{'ng-invalid': invalid}">
-		<select ng-model="recurrenceType">
-			<option ng-value="RT_EVERY">every</option>
-			<option ng-value="RT_FIXED">each</option>
-			<option ng-value="RT_LIST">list</option>
-			<option ng-value="RT_RANGE">range</option>
+		<div style="display: block" *ngIf="names != null"><small>({{shortNames}})</small></div>
+	</label>
+	<div class="col-xs-9 cron-field-value" [ngClass]="{'ng-invalid': invalid}">
+		<select baseline [(ngModel)]="recurrenceType" class="form-control col-xs-5" style="max-width: 9rem;">
+			<option [ngValue]="RT_EVERY">every</option>
+			<option [ngValue]="RT_FIXED">each</option>
+			<option [ngValue]="RT_LIST">list</option>
+			<option [ngValue]="RT_RANGE">range</option>
 		</select>
-		<span style="margin-right: 10px;">
-			<input type="text" ng-model="recurrenceList" ng-required="true" ng-if="recurrenceType == RT_LIST" style="width: 100px;" placeholder="1,2-4,7">
-			<div ng-if="recurrenceType == RT_FIXED" style="display: inline;"">
-				<input type="number" ng-model="recurrenceFixed" ng-required="true" ng-if="names == null" min="{{rangeLow}}" max="{{rangeHigh}}" step="1" style="width: 45px;" placeholder="5">
-				<select ng-if="names != null" ng-model="recurrenceFixed" required name="fixed-recurrence-list">
-					<option ng-repeat="i in namesRange" ng-value="i+rangeLow">{{names[i]}}</option>
+
+		<span style="margin: 0px 12px;" baseline>
+			<material-input type="text" [(ngModel)]="recurrenceList" required *ngIf="recurrenceType == RT_LIST" style="width: 10rem; position: relative; top: -6px;" placeholder="1,2-4,7"></material-input>
+			<div *ngIf="recurrenceType == RT_FIXED" style="display: inline;">
+				<material-input type="number" [(ngModel)]="recurrenceFixed" required *ngIf="names == null" min="{{rangeLow}}" max="{{rangeHigh}}" step="1" style="width: 45px; position: relative; top: -6px;" placeholder="5"></material-input>
+				<select baseline *ngIf="names != null" [(ngModel)]="recurrenceFixed" required name="fixed-recurrence-list" class="form-control" style="max-width: 10rem; display: inherit;">
+					<option *ngFor="let i of namesRange" [ngValue]="i+rangeLow">{{names[i]}}</option>
 				</select>
 			</div>
-			<span ng-if="recurrenceType == RT_RANGE" style="white-space:nowrap;">
-				<input type="number" ng-model="recurrenceRangeLow" ng-required="true" min="{{rangeLow}}" max="{{recurrenceRangeLowMax}}" step="1" style="width: 45px;">
+			<span *ngIf="recurrenceType == RT_RANGE">
+				<material-input type="number" [(ngModel)]="recurrenceRangeLow" required="true" min="{{rangeLow}}" max="{{recurrenceRangeLowMax}}" step="1" style="width: 45px; position: relative; top: -6px;"></material-input>
 				<strong>-</strong>
-				<input type="number" ng-model="recurrenceRangeHigh" ng-required="true" min="{{recurrenceRangeHighMin}}" max="{{rangeHigh}}" step="1" ng-if="recurrenceType == RT_RANGE" style="width: 45px;">
+				<material-input type="number" [(ngModel)]="recurrenceRangeHigh" required="true" min="{{recurrenceRangeHighMin}}" max="{{rangeHigh}}" step="1" *ngIf="recurrenceType == RT_RANGE" style="width: 45px; position: relative; top: -6px;"></material-input>
 			</span>
 		</span>
-		<div style="display: inline" ng-if="recurrenceType != RT_FIXED">
-			<input type="checkbox" ng-model="enOnlyEach"> each
-			<span style="white-space:nowrap;"><input type="number" ng-model="onlyEach" ng-disabled="!enOnlyEach" min="2" step="1" style="width: 3em;">-{{reductionPostfix}}</span>
+		<div style="display: inline" *ngIf="recurrenceType != RT_FIXED">
+			<material-checkbox baseline [(ngModel)]="enOnlyEach" [label]="'Each'"></material-checkbox>
+			<material-input baseline type="number" [(ngModel)]="onlyEach" [disabled]="!enOnlyEach" min="2" step="1" style="width: 3.5em; position: relative; top: -6px;" trailingText="{{reductionPostfix}}"></material-input>
 		</div>
 	</div>
 </div>
