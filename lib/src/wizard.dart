@@ -29,7 +29,10 @@ class CronWizard {
 
 
   @Input("render_interval")
-  void set render_interval(String val) => interval = val;
+  void set render_interval(String val) {
+    interval = val;
+    render(interval);
+  }
 
   final _valueStream = new StreamController<String>();
   @Output()
@@ -97,6 +100,11 @@ class CronWizard {
     }
     else {
       _interval = newValue;
+      _minute = "*";
+      _hour = "*";
+      _day = "*";
+      _month = "*";
+      _dow = "*";
       invalid = true;
     }
   }

@@ -6,7 +6,7 @@ part of cron_wizard;
     directives: const [CORE_DIRECTIVES, materialDirectives, formDirectives, materialNumberInputDirectives],
     providers: const [materialProviders],
 )
-class CronField implements ControlValueAccessor {
+class CronField {
   static const int _RT_EVERY = 0, _RT_FIXED = 1, _RT_LIST = 2, _RT_RANGE = 3;
   NgForm form;
 
@@ -29,9 +29,9 @@ class CronField implements ControlValueAccessor {
   List<int> namesRange;
   String shortNames;
 
-  String _value = "*";
+  String _value;
   get value => _value;
-  set value(String val) => _value = val ?? _value;
+  set value(String val) => _value = val;
 
   @Input("names")
   void set names(List<String> value) {
@@ -45,7 +45,10 @@ class CronField implements ControlValueAccessor {
   }
 
   @Input("model_value")
-  void set model_value(String val) => _value = val;
+  void set model_value(String val) {
+    _value = val;
+    this.render(_value);
+  }
 
   final _valueStream = new StreamController<String>();
   @Output()
@@ -110,7 +113,7 @@ class CronField implements ControlValueAccessor {
   int get recurrenceRangeHighMin => recurrenceRangeLow == null ? rangeLow : math.max(rangeLow, recurrenceRangeLow);
   
   CronField(this.form) {
-    updateModel(false);
+
   }
   
   bool invalid = true;
@@ -160,6 +163,10 @@ class CronField implements ControlValueAccessor {
         if(_enOnlyEach)
           _onlyEach = int.parse(sEach);
       }
+    } else {
+      //invalid
+      _value = null;
+      _valueStream.add(_value);
     }
   }
   
@@ -170,10 +177,10 @@ class CronField implements ControlValueAccessor {
         val = "*";
         break;
       case _RT_FIXED:
-        val = recurrenceFixed.toString();
+        val = recurrenceFixed?.toStringAsFixed(0);
         break;
       case _RT_RANGE:
-        val = "${recurrenceRangeLow}-${recurrenceRangeHigh}";
+        val = "${recurrenceRangeLow?.toStringAsFixed(0)}-${recurrenceRangeHigh?.toStringAsFixed(0)}";
         break;
       case _RT_LIST:
         val = recurrenceList;
@@ -181,9 +188,7 @@ class CronField implements ControlValueAccessor {
     }
     
     if(enOnlyEach)
-      val += "/${onlyEach.round()}";
-
-    print("Updated: $val");
+      val += "/${onlyEach?.toStringAsFixed(0)}";
 
     if(emit){
       _value = val;
