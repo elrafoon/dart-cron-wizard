@@ -31,7 +31,7 @@ class CronWizard {
   @Input("render_interval")
   void set render_interval(String val) {
     interval = val;
-    render(interval);
+//    render(interval);
   }
 
   final _valueStream = new StreamController<String>();
@@ -41,6 +41,7 @@ class CronWizard {
 
   String get interval => _interval;
   void set interval(String value) {
+//    print("get interval");
     render(value);
   }
   
@@ -100,13 +101,9 @@ class CronWizard {
     }
     else {
       _interval = newValue;
-      _minute = "*";
-      _hour = "*";
-      _day = "*";
-      _month = "*";
-      _dow = "*";
       invalid = true;
     }
+//    print("interval:  $_interval");
   }
   
   void updateModel() {

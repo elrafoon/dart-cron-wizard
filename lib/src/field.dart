@@ -31,7 +31,7 @@ class CronField {
 
   String _value;
   get value => _value;
-  set value(String val) => _value = val;
+  set value(String val) => _value = val ?? null;
 
   @Input("names")
   void set names(List<String> value) {
@@ -46,6 +46,7 @@ class CronField {
 
   @Input("model_value")
   void set model_value(String val) {
+//    print("set model $name value: $val (from $_value)");
     _value = val;
     this.render(_value);
   }
@@ -113,7 +114,7 @@ class CronField {
   int get recurrenceRangeHighMin => recurrenceRangeLow == null ? rangeLow : math.max(rangeLow, recurrenceRangeLow);
   
   CronField(this.form) {
-
+    updateModel(false);
   }
   
   bool invalid = true;
@@ -124,6 +125,7 @@ class CronField {
   bool inRange(num a, num l, num h) => a >= l && a <= h;
   
   void render(dynamic newValue) {
+//    print(">>> render $name from $value to new value $newValue");
     invalid = !(newValue is String);
     if(!invalid) {
       Match mCrude = _reCrude.matchAsPrefix(newValue);
@@ -193,6 +195,7 @@ class CronField {
       val += "/${onlyEach?.toStringAsFixed(0)}";
 
     if(emit){
+//      print("from $name emit $val, reccurenceType: $recurrenceType");
       _value = val;
       _valueStream.add(_value);
     }
