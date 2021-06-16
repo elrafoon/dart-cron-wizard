@@ -7,13 +7,13 @@
 
 <div id="collapseWizard{{id}}" class="panel-collapse collapse">
 	<div class="panel-body">
-		<div class="row"><cron-field name="minute" field-name="minute" range-low="0" range-high="59" ng-model="minute"></cron-field></div>
-		<div class="row"><cron-field name="hour" field-name="hour" range-low="0" range-high="23" ng-model="hour"></cron-field></div>
-		<div class="row"><cron-field name="day" field-name="day of month" range-low="1" range-high="31" ng-model="day"></cron-field></div>
-		<div class="row">
+		<div ng-if="!hideMinute" class="row"><cron-field name="minute" field-name="minute" range-low="0" range-high="59" ng-model="minute"></cron-field></div>
+		<div ng-if="!hideHour" class="row"><cron-field name="hour" field-name="hour" range-low="0" range-high="23" ng-model="hour"></cron-field></div>
+		<div ng-if="!hideDay" class="row"><cron-field name="day" field-name="day of month" range-low="1" range-high="31" ng-model="day"></cron-field></div>
+		<div ng-if="!hideMonth" class="row">
 			<cron-field name="month" field-name="month" range-low="1" range-high="12" ng-model="month" names="['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']"></cron-field>
 		</div>
-		<div class="row">
+		<div ng-if="!hideDayOfWeek" class="row">
 			<cron-field name="dow" field-name="day of week" range-low="0" range-high="7" ng-model="dow" names="['sun','mon','tue','wed','thu','fri','sat','sun']"></cron-field>
 		</div>
 	</div>

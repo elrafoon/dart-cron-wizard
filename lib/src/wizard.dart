@@ -22,6 +22,21 @@ class CronWizard {
   {
     this.model.render = render; 
   }
+
+  @NgOneWay("hide-minute")
+  bool hideMinute = false;  
+  
+  @NgOneWay("hide-hour")
+  bool hideHour = false;  
+  
+  @NgOneWay("hide-day")
+  bool hideDay = false;  
+  
+  @NgOneWay("hide-month")
+  bool hideMonth = false;  
+  
+  @NgOneWay("hide-day-of-week")
+  bool hideDayOfWeek = false;
   
   bool get anyFieldInvalid {
     if(form == null)
